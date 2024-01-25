@@ -27,7 +27,7 @@ export function SwaggerApi({
 }: ISwaggerParams) {
   const consumeTypes = ['application/json', 'application/x-www-form-urlencoded']
 
-  const decorators = []
+  const decorators: any[] = []
 
   decorators.push(consumeTypes.map((consumeType) => ApiConsumes(consumeType)))
 

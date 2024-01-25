@@ -1,10 +1,11 @@
 import * as Joi from 'joi'
-
+import z from 'zod'
 import { configuration } from '@/config'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 
 import { AppController } from './app.controller'
+import { TestController } from './api/test/test.controller'
 
 const EnvSchema = {
   PORT: Joi.number(),
@@ -26,7 +27,7 @@ const EnvSchema = {
       load: [configuration],
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, TestController],
   providers: [],
 })
 export class AppModule {}
