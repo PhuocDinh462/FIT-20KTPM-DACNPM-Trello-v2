@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Box, ClickAwayListener, Grow, Paper, Popper, MenuList, Stack, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 export default function Account() {
   const [open, setOpen] = React.useState(false)
@@ -151,37 +152,41 @@ export default function Account() {
                           TRELLO
                         </Typography>
 
-                        <Typography
-                          variant='body1'
-                          sx={{
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                            color: '#b6c2cf',
-                            marginBottom: '4px',
-                            padding: '10px 20px',
-                            '&:hover': {
-                              backgroundColor: 'rgba(255,255,255,0.1)'
-                            }
-                          }}
-                        >
-                          Account management
-                        </Typography>
+                        <Link to={'/profile'} style={{ width: '100%' }}>
+                          <Typography
+                            variant='body1'
+                            sx={{
+                              cursor: 'pointer',
+                              fontSize: '14px',
+                              color: '#b6c2cf',
+                              marginBottom: '4px',
+                              padding: '10px 20px',
+                              '&:hover': {
+                                backgroundColor: 'rgba(255,255,255,0.1)'
+                              }
+                            }}
+                          >
+                            Account management
+                          </Typography>
+                        </Link>
 
-                        <Typography
-                          variant='body1'
-                          sx={{
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                            color: '#b6c2cf',
-                            marginBottom: '4px',
-                            padding: '10px 20px',
-                            '&:hover': {
-                              backgroundColor: 'rgba(255,255,255,0.1)'
-                            }
-                          }}
-                        >
-                          Activity
-                        </Typography>
+                        <Link to={'/activity'}>
+                          <Typography
+                            variant='body1'
+                            sx={{
+                              cursor: 'pointer',
+                              fontSize: '14px',
+                              color: '#b6c2cf',
+                              marginBottom: '4px',
+                              padding: '10px 20px',
+                              '&:hover': {
+                                backgroundColor: 'rgba(255,255,255,0.1)'
+                              }
+                            }}
+                          >
+                            Activity
+                          </Typography>
+                        </Link>
 
                         <Typography
                           variant='body1'
