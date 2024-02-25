@@ -3,14 +3,20 @@ import { Box, Button, ClickAwayListener, Grow, Paper, Popper, MenuList, Stack, T
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faStar as starFull } from '@fortawesome/free-solid-svg-icons'
 import noneStar from '~/assets/noneStar.svg'
+import Loading from '~/components/Loading'
 
 const length = 1
 
 export default function Starred() {
   const [open, setOpen] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
   const [isHoveredStar, setIsHoveredStar] = React.useState(false)
   const [star, setStar] = React.useState(true)
   const anchorRef = React.useRef<HTMLButtonElement>(null)
+
+  setTimeout(() => {
+    setIsLoading(false)
+  }, 10000)
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
@@ -110,6 +116,8 @@ export default function Starred() {
                           Star important boards to access them quickly and easily.
                         </Typography>
                       </Box>
+                    ) : isLoading ? (
+                      <Loading />
                     ) : (
                       <Box
                         sx={{
