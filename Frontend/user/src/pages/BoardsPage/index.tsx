@@ -31,10 +31,10 @@ const data2: BoardSubset[] = [
   { _id: '0', name: 'Project Trello', is_star: true },
   { _id: '1', name: 'Board 2', is_star: false },
   { _id: '2', name: 'Board 3', is_star: false },
-  { _id: '3', name: 'Board 3', is_star: false },
-  { _id: '4', name: 'Board 3', is_star: true },
-  { _id: '5', name: 'Board 3', is_star: false },
-  { _id: '6 ', name: 'Board 3', is_star: false }
+  { _id: '3', name: 'Board 4', is_star: false },
+  { _id: '4', name: 'Board 5', is_star: true },
+  { _id: '5', name: 'Board 6', is_star: false },
+  { _id: '6', name: 'Board 7', is_star: false }
 ]
 
 interface BoardsPageLabelProps {
