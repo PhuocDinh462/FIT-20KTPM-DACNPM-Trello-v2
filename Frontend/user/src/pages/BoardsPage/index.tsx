@@ -34,7 +34,11 @@ const data2: BoardSubset[] = [
   { _id: '3', name: 'Board 4', is_star: false },
   { _id: '4', name: 'Board 5', is_star: true },
   { _id: '5', name: 'Board 6', is_star: false },
-  { _id: '6', name: 'Board 7', is_star: false }
+  { _id: '6', name: 'Board 7', is_star: false },
+  { _id: '7', name: 'Board 8', is_star: false },
+  { _id: '8', name: 'Board 9', is_star: false },
+  { _id: '9', name: 'Board 10', is_star: false },
+  { _id: '10', name: 'Board 11', is_star: false }
 ]
 
 interface BoardsPageLabelProps {
