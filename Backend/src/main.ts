@@ -26,6 +26,7 @@ async function bootstrap() {
   }
   SwaggerModule.setup('swagger', app, document)
   const PORT = process.env.PORT || 3000
+  app.enableCors()
   return app.listen(PORT, () => {
     console.log(`Server are running on http://localhost:${PORT}`)
   })
