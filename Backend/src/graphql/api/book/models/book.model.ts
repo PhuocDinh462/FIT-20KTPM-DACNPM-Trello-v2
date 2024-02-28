@@ -3,8 +3,6 @@ import { Document } from 'mongoose'
 import { Field, ObjectType } from '@nestjs/graphql'
 import { Schema, SchemaFactory } from '@nestjs/mongoose'
 
-export type BookDocument = Book & Document
-
 @ObjectType()
 @Schema()
 export class Book {
@@ -18,4 +16,5 @@ export class Book {
   publishedDate: boolean
 }
 
+export type BookDocument = Book & Document
 export const BookSchema = SchemaFactory.createForClass(Book)

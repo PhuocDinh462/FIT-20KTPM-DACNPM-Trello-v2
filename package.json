@@ -14,5 +14,10 @@
     "Frontend/user",
     "packages/shared"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "@apollo/server": "^4.10.0",
+    "@nestjs/apollo": "^12.1.0",
+    "@nestjs/graphql": "^12.1.1",
+    "graphql": "^16.8.1"
+  }
 }
