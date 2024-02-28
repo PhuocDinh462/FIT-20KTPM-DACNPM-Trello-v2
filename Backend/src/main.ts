@@ -1,10 +1,11 @@
-import { initApplication } from '@/app'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { TrelloApi } from '@trello-v2/shared'
 import { ZodType } from 'zod'
 import zodToJsonSchema from 'zod-to-json-schema'
 
-function GenerateSwaggerSchema() {
+import { initApplication } from '@/app'
+
+function generateSwaggerSchema() {
   const schemas: Record<string, object> = {}
   Object.values(TrelloApi).forEach((api) => {
     Object.entries(api).forEach(([name, schema]) => {
@@ -22,7 +23,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config)
   document.components.schemas = {
     ...document.components.schemas,
-    ...GenerateSwaggerSchema(),
+    ...generateSwaggerSchema(),
   }
   SwaggerModule.setup('swagger', app, document)
   const PORT = process.env.PORT || 3000
@@ -30,4 +31,4 @@ async function bootstrap() {
     console.log(`Server are running on http://localhost:${PORT}`)
   })
 }
-bootstrap()
+void bootstrap()
