@@ -1,7 +1,7 @@
-import { Document } from 'mongoose'
+import mongoose, { Document } from 'mongoose'
 
 import { Field, ObjectType } from '@nestjs/graphql'
-import { Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Schema } from '@nestjs/mongoose'
 
 @ObjectType()
 @Schema()
@@ -17,4 +17,8 @@ export class Book {
 }
 
 export type BookDocument = Book & Document
-export const BookSchema = SchemaFactory.createForClass(Book)
+export const BookSchema = new mongoose.Schema({
+  title: String,
+  author: String,
+  publishedDate: Boolean,
+})

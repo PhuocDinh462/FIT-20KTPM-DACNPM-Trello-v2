@@ -11,7 +11,6 @@ export class BookService {
 
   async create(book: BookInput): Promise<Book> {
     const newBook = new this.bookModel({ ...book })
-    console.log(newBook)
 
     return await newBook.save()
   }
