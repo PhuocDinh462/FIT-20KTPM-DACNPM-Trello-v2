@@ -21,7 +21,9 @@ import { WorkspaceModule } from './workspace/workspace.module'
       driver: ApolloDriver,
       playground: true,
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
-      installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': true,
+      },
       sortSchema: true,
     }),
     MongooseModule.forRoot('mongodb://MONGO_USER:MONGO_123@localhost:7000/trello?authSource=admin'),
