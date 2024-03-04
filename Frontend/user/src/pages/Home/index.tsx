@@ -12,6 +12,7 @@ import {
   colors
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
+import AddIcon from '@mui/icons-material/Add'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { TrelloApi } from '@trello-v2/shared'
@@ -54,8 +55,33 @@ export function HomePage() {
       })
   }
 
+  const handleAdd = async () => {
+    const body = {
+      workspace_id: 'string',
+      name: 'string',
+      visibility: 'private'
+    }
+
+    setLoading(true)
+    await axios
+      .post(`http://localhost:3333/api/board/createBoard`, body)
+      .then((res) => {
+        console.log(res.data)
+        setData([...data, res.data.data])
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
   return (
     <>
+      <IconButton aria-label='add' onClick={() => handleAdd()}>
+        <AddIcon />
+      </IconButton>
       <TableContainer component={Paper}>
         <Table aria-label='simple table'>
           <TableHead>
