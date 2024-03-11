@@ -1,8 +1,9 @@
 import { ReactNode } from 'react'
 import backgroundImage from '../../assets/Board/bg_2.jpg';
+import { UniqueIdentifier } from '@dnd-kit/core';
 interface LayoutProps {
   children: ReactNode,
-  openCardSetting:string
+  openCardSetting:UniqueIdentifier
 }
 export const BoardLayout: React.FC<LayoutProps> = ({ children, openCardSetting }) => {
   const backgroundStyle = {

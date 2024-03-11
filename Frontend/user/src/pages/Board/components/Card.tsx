@@ -6,6 +6,7 @@ import { BsPencil } from 'react-icons/bs'
 import CardSetting from './CardSetting'
 import { MdOutlineRemoveRedEye } from 'react-icons/md'
 import { useTheme } from '~/components/Theme/themeContext'
+import { UniqueIdentifier } from '@dnd-kit/core'
 export default function CardComponent({ card, setOpenCardSetting }: CardComponentProps) {
   const { colors, darkMode } = useTheme()
 
@@ -20,7 +21,7 @@ export default function CardComponent({ card, setOpenCardSetting }: CardComponen
     // border: isDragging ? 0.5 : undefined
   }
   const [isHovered, setIsHovered] = useState(false)
-  const [cardSettingOpen, setCardSettingOpen] = useState<string>('')
+  const [cardSettingOpen, setCardSettingOpen] = useState<UniqueIdentifier>('')
   const [isHoveredWatcher, setIsHoveredWatcher] = useState<string>()
   const [isHoveredTextInput, setIsHoveredTextInput] = useState<boolean>(false)
   const avtPath = '/src/assets/Profile/avt.png'

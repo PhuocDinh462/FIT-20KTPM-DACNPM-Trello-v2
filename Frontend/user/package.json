@@ -33,6 +33,7 @@
     "@reduxjs/toolkit": "^2.0.1",
     "@trello-v2/shared": "*",
     "@types/faker": "^6.6.9",
+    "axios": "^1.6.7",
     "faker": "^5.5.3",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",

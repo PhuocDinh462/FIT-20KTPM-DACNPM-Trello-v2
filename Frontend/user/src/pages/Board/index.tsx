@@ -1,4 +1,3 @@
-
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { listTestDataArray } from './testData/test_data'
 import { List, Card } from './type/index'
@@ -23,7 +22,6 @@ import { BoardLayout } from '~/layouts'
 import { generatePlaceHolderCard } from '~/utils/fomatter'
 import LoadingComponent from '~/components/Loading'
 import { CardComponent, ListComponent } from './components'
-
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -71,16 +69,16 @@ export function Board() {
   useEffect(() => {
     console.log('update list')
 
-    const updatedLists_placeHolder = listTestDataArray.map((list) => ({
+    const updatedLists_placeHolder = listTestDataArray.map((list: List) => ({
       ...list,
       data: list.cards.map((task) => ({
         ...task,
         placeHolder: false // Set your default value for placeHolder
       }))
     }))
-    const updatedLists = updatedLists_placeHolder.map((list) => {
+    const updatedLists = updatedLists_placeHolder.map((list: List) => {
       // Check if data array is empty
-      if (list.data.length === 0) {
+      if (list.cards.length === 0) {
         // Add a new item to data array
         const newItem = generatePlaceHolderCard(list)
 
@@ -127,6 +125,7 @@ export function Board() {
       newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overList.cards.length + 1
 
       const nextList = cloneDeep(prevList)
+
       const nextActiveList = nextList?.find((list) => list._id === activeList._id)
       const nextOverList = nextList?.find((list) => list._id === overList._id)
 
@@ -136,25 +135,33 @@ export function Board() {
           nextActiveList.cards = [generatePlaceHolderCard(nextActiveList)]
         }
       }
+
       if (nextOverList) {
         nextOverList.cards = nextOverList.cards.filter((card) => card._id !== activeDragingCardId)
         const rebuild_activeDraggingCardData = {
           ...activeDraggingCardData,
           list_id: nextOverList._id
         } as Card
+
         // Ensure activeDraggingCardData is not undefined before using it
         if (isCard(activeDraggingCardData)) {
-          nextOverList.cards.splice(newCardIndex, 0, rebuild_activeDraggingCardData)
-          nextOverList.cards = nextOverList.cards.filter((card) => card.placeHolder === false)
+          nextOverList.cards = [
+            ...nextOverList.cards.slice(0, newCardIndex),
+            rebuild_activeDraggingCardData,
+            ...nextOverList.cards.slice(newCardIndex)
+          ]
         }
       }
-      console.log('nextList = ', nextOverList)
-      // setOverListData(nextOverList)
+
+      console.log('nextList = ', nextList)
       return nextList
     })
   }
   function handleDragStart(e: DragStartEvent) {
-    console.log('Drag Start: ', e?.active?.data?.current?.list_id ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN)
+    console.log(
+      'Drag Start: ',
+      e?.active?.data?.current?.list_id ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN
+    )
     setActiveDragItemId(e?.active?.id.toString())
     setActiveDragItemType(e?.active?.data?.current?.list_id ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN)
     setActiveDragItemData(e?.active?.data?.current)
@@ -232,6 +239,7 @@ export function Board() {
         const oldIndex = oldListWhenDragging.cards.findIndex((data) => data._id === activeDragItemId)
         const newIndex = overList.cards.findIndex((data) => data._id === overCardId)
         const newList = arrayMove(oldListWhenDragging.cards, oldIndex, newIndex)
+
         setListsData((prevList) => {
           const nextList = cloneDeep(prevList)
 
@@ -241,6 +249,7 @@ export function Board() {
           }
           return nextList
         })
+
         setAction(!action)
       }
     }
@@ -272,7 +281,7 @@ export function Board() {
       }
     })
   }
-  const [openCardSetting, setOpenCardSetting] = useState<string>("")
+  const [openCardSetting, setOpenCardSetting] = useState<UniqueIdentifier>('')
   return (
     <BoardLayout openCardSetting={openCardSetting}>
       <div className='mx-auto p-4 text-center text-3xl font-bold uppercase text-black'>Header Area</div>
@@ -281,15 +290,15 @@ export function Board() {
         {listsData && (
           <div className={`w-[100%]`}>
             <Suspense fallback={<LoadingComponent />}>
-              <LazyListsComponent lists={listsData} setOpenCardSetting={setOpenCardSetting}/>
+              <LazyListsComponent lists={listsData} setOpenCardSetting={setOpenCardSetting} />
             </Suspense>
             <DragOverlay dropAnimation={customDropAnimation}>
               {!activeDragItemId || !activeDragItemType}
               {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
-                <ListComponent list={activeDragItemData} setOpenCardSetting={setOpenCardSetting}/>
+                <ListComponent list={activeDragItemData} setOpenCardSetting={setOpenCardSetting} />
               )}
               {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
-                <CardComponent card={activeDragItemData} setOpenCardSetting={setOpenCardSetting}/>
+                <CardComponent card={activeDragItemData} setOpenCardSetting={setOpenCardSetting} />
               )}
             </DragOverlay>
           </div>

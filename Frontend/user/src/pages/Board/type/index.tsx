@@ -1,15 +1,16 @@
-import { UniqueIdentifier } from '@dnd-kit/core';
+import { UniqueIdentifier } from '@dnd-kit/core'
 import { DbSchemas } from '@trello-v2/shared'
-import faker from 'faker';
-const generateRandomDateOrNull = () => (faker.datatype.boolean() ? faker.date.past() : null);
-export type Card = Omit<DbSchemas.CardlistSchema.ICard, 'placeHolder, list_id,_id'> & {
-  placeHolder: boolean,
-  list_id:string,
-  _id:UniqueIdentifier
+import faker from 'faker'
+const generateRandomDateOrNull = () => (faker.datatype.boolean() ? faker.date.past() : null)
+export type Card = Omit<DbSchemas.CardlistSchema.ICard, 'placeHolder' | 'list_id' | '_id'> & {
+  placeHolder: boolean
+  list_id: string
+  _id: UniqueIdentifier
 }
-export type List = Omit<DbSchemas.CardlistSchema.CardList, 'cards'> & {
-  cards: Card[],
-};
+export type List = Omit<DbSchemas.CardlistSchema.CardList, 'cards'|'_id'> & {
+  cards: Card[]
+  _id: UniqueIdentifier
+}
 // export interface Card {
 //   id: string
 //   list_id: string
@@ -28,13 +29,13 @@ export const defaultCard = {
   cover: '',
   description: '',
   archive_at: generateRandomDateOrNull(),
-  activities:[],
+  activities: [],
   watcher_email: []
 }
 
 export interface CardComponentProps {
   card: Card
-  setOpenCardSetting: (data: string) => void
+  setOpenCardSetting: (data: UniqueIdentifier) => void
 }
 // export interface List {
 //   _id: string
@@ -45,9 +46,9 @@ export interface CardComponentProps {
 // }
 export interface ListComponentProps {
   list: List
-  setOpenCardSetting: (data: string) => void
+  setOpenCardSetting: (data: UniqueIdentifier) => void
 }
 export interface ListsComponentProps {
   lists: List[]
-  setOpenCardSetting: (data: string) => void
+  setOpenCardSetting: (data: UniqueIdentifier) => void
 }

@@ -11,8 +11,8 @@ import { useTheme } from '~/components/Theme/themeContext'
 export default function ListComponent({ list, setOpenCardSetting }: ListComponentProps) {
   const { colors, darkMode } = useTheme()
 
-  const [listSettingOpen, setListSettingOpen] = useState<string>()
-  const [addCardOpenAt, setAddCardOpenAt] = useState<string>('')
+  const [listSettingOpen, setListSettingOpen] = useState<UniqueIdentifier>()
+  const [addCardOpenAt, setAddCardOpenAt] = useState<UniqueIdentifier>('')
 
   const componentRef_AddCard = useRef<HTMLDivElement>(null)
   const componentRef_ListSetting = useRef<HTMLDivElement>(null)
@@ -40,7 +40,7 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
   }, [])
 
   const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
-    id: list._id || 'unique' + list._id,
+    id: list._id,
     data: { ...list }
   })
 
@@ -74,7 +74,7 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
       </div>
       <div className={` relative`}>
         <SortableContext
-          items={list.cards.map((c) => c._id) as (UniqueIdentifier | { id: UniqueIdentifier })[]}
+          items={list.cards.map((c) => c._id)}
           strategy={verticalListSortingStrategy}
         >
           {list.cards &&
