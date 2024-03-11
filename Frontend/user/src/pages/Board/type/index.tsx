@@ -49,6 +49,6 @@ export interface ListComponentProps {
   setOpenCardSetting: (data: UniqueIdentifier) => void
 }
 export interface ListsComponentProps {
-  lists: List[]
+  lists: List[] | undefined
   setOpenCardSetting: (data: UniqueIdentifier) => void
 }

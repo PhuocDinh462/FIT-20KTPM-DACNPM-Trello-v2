@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { IoImagesOutline } from 'react-icons/io5'
 import { useTheme } from '~/components/Theme/themeContext'
+import { createCardAPI } from '~/api/Card'
 export default function ListComponent({ list, setOpenCardSetting }: ListComponentProps) {
   const { colors, darkMode } = useTheme()
 
@@ -38,7 +39,18 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
       document.removeEventListener('mousedown', handleClickOutside_ListSetting)
     }
   }, [])
-
+  const [newCardName, setNewCardName] = useState<string>('')
+  async function addCard() {
+    const data = {
+      name: newCardName,
+      index: 1,
+      cover: '',
+      description: '',
+      cardlist_id: '12345'
+    }
+    const res = await createCardAPI(data)
+    console.log(res)
+  }
   const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
     id: list._id,
     data: { ...list }
@@ -73,10 +85,7 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
         )}
       </div>
       <div className={` relative`}>
-        <SortableContext
-          items={list.cards.map((c) => c._id)}
-          strategy={verticalListSortingStrategy}
-        >
+        <SortableContext items={list.cards.map((c) => c._id)} strategy={verticalListSortingStrategy}>
           {list.cards &&
             list.cards.map((card, index) => (
               <CardComponent key={index} card={card} setOpenCardSetting={setOpenCardSetting} />
@@ -95,6 +104,8 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
                     }}
                     className={` h-full w-full rounded-lg px-2 pb-8 text-left focus:border-0 focus:outline-none focus:ring-0 `}
                     placeholder='Enter the title for this card...'
+                    value={newCardName}
+                    onChange={(e)=>setNewCardName(e.target.value)}              
                     autoFocus
                   ></input>
                 </div>
@@ -104,6 +115,7 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
                   className=' rounded   bg-blue-600 px-3 py-2 hover:bg-blue-700'
                   onClick={() => {
                     if (list._id) setAddCardOpenAt(list._id)
+                    addCard()
                   }}
                 >
                   <p className={`text-left font-semibold text-white`}> Add card</p>
@@ -127,6 +139,8 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
                     }}
                     className={` h-full w-full rounded-lg px-2 pb-8 text-left focus:border-0 focus:outline-none focus:ring-0 `}
                     placeholder='Enter the title for this card...'
+                    value={newCardName}
+                    onChange={(e)=>setNewCardName(e.target.value)}
                     autoFocus
                   ></input>
                 </div>
@@ -136,6 +150,7 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
                   className=' rounded   bg-blue-600 px-3 py-2 hover:bg-blue-700'
                   onClick={() => {
                     if (list._id) setAddCardOpenAt(list._id)
+                    addCard()
                   }}
                 >
                   <p className={`text-left font-semibold text-white`}> Add card</p>
