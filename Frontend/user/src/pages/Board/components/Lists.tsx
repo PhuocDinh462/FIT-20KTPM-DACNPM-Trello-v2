@@ -24,7 +24,7 @@ export default function ListsComponent({ lists, setOpenCardSetting }: ListsCompo
           //           <ListComponent list={list} listDraggingIn={listDraggingIn} />
           // >>>>>>> origin/dev/fe
         ))}
-        <button className={`ml-5 rounded border h-[50px] bg-black bg-opacity-50 text-white`}>
+        <button className={`ml-5 rounded-xl border h-[50px] bg-black bg-opacity-50 text-white`}>
           + Add List
         </button>
       </div>
