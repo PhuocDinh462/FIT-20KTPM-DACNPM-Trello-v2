@@ -1,6 +1,8 @@
+
 import { useState, useEffect, lazy, Suspense } from 'react'
-import { listTestDataArray} from './testData/test_data'
+import { listTestDataArray } from './testData/test_data'
 import { List, Card } from './type/index'
+
 import {
   DndContext,
   DragEndEvent,
@@ -15,17 +17,18 @@ import {
   DragMoveEvent
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
+
 import { cloneDeep, isEmpty } from 'lodash'
 import { BoardLayout } from '~/layouts'
 import { generatePlaceHolderCard } from '~/utils/fomatter'
 import LoadingComponent from '~/components/Loading'
 import { CardComponent, ListComponent } from './components'
 
+
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
-let lists  = listTestDataArray
 // const LazyCardComponent = lazy(() => import('./components/Card'))
 // const LazyListComponent = lazy(() => import('./components/List'))
 const LazyListsComponent = lazy(() => import('./components/Lists'))
@@ -64,11 +67,11 @@ export function Board() {
       }
     })
   )
+
   useEffect(() => {
-    setListsData(lists)
     console.log('update list')
 
-    const updatedLists_placeHolder = lists.map((list) => ({
+    const updatedLists_placeHolder = listTestDataArray.map((list) => ({
       ...list,
       data: list.cards.map((task) => ({
         ...task,
@@ -99,7 +102,7 @@ export function Board() {
     return listsData?.find((list) => list?.cards?.map((card) => card._id)?.includes(cardId))
   }
   function isCard(obj: any): obj is Card {
-    return '_id' in obj && 'list_id' in obj && 'order' in obj && 'name' in obj && 'list_name' in obj
+    return 'id' in obj && 'list_id' in obj && 'order' in obj && 'name' in obj && 'list_name' in obj
   }
   function handleUpdateAfterDragging() {
     // Gọi API update data ở phía backend
@@ -226,8 +229,8 @@ export function Board() {
           activeDraggingCardData
         )
       } else {
-        const oldIndex = oldListWhenDragging.cards.findIndex((cards) => cards._id === activeDragItemId)
-        const newIndex = overList.cards.findIndex((cards) => cards._id === overCardId)
+        const oldIndex = oldListWhenDragging.cards.findIndex((data) => data._id === activeDragItemId)
+        const newIndex = overList.cards.findIndex((data) => data._id === overCardId)
         const newList = arrayMove(oldListWhenDragging.cards, oldIndex, newIndex)
         setListsData((prevList) => {
           const nextList = cloneDeep(prevList)
@@ -269,32 +272,23 @@ export function Board() {
       }
     })
   }
-  const [openCardSetting, setOpenCardSetting] = useState<string>('')
-  useEffect(() => {
-    console.log(openCardSetting)
-    if (openCardSetting) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
-  }, [openCardSetting])
   return (
-    <BoardLayout openCardSetting={openCardSetting}>
-      <div className={`mx-auto p-4 text-center text-3xl font-bold uppercase text-black`}>Header Area</div>
+    <BoardLayout>
+      <div className='mx-auto p-4 text-center text-3xl font-bold uppercase text-black'>Header Area</div>
 
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragMove={handleDragOver} onDragEnd={handleDragEnd}>
         {listsData && (
-          <div className={`relative z-20 w-[100%]`}>
+          <div className={`w-[100%]`}>
             <Suspense fallback={<LoadingComponent />}>
-              <LazyListsComponent lists={listsData} setOpenCardSetting={setOpenCardSetting} />
+              <LazyListsComponent lists={listsData} />
             </Suspense>
             <DragOverlay dropAnimation={customDropAnimation}>
               {!activeDragItemId || !activeDragItemType}
               {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
-                <ListComponent list={activeDragItemData} setOpenCardSetting={(data) => setOpenCardSetting(data)} />
+                <ListComponent list={activeDragItemData} />
               )}
               {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
-                <CardComponent card={activeDragItemData} setOpenCardSetting={(data) => setOpenCardSetting(data)} />
+                <CardComponent card={activeDragItemData} />
               )}
             </DragOverlay>
           </div>
