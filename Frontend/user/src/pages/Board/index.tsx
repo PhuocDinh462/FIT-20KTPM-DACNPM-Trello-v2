@@ -154,7 +154,7 @@ export function Board() {
     })
   }
   function handleDragStart(e: DragStartEvent) {
-    console.log('Drag Start: ', e)
+    console.log('Drag Start: ', e?.active?.data?.current?.list_id ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN)
     setActiveDragItemId(e?.active?.id.toString())
     setActiveDragItemType(e?.active?.data?.current?.list_id ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN)
     setActiveDragItemData(e?.active?.data?.current)
@@ -272,23 +272,24 @@ export function Board() {
       }
     })
   }
+  const [openCardSetting, setOpenCardSetting] = useState<string>("")
   return (
-    <BoardLayout>
+    <BoardLayout openCardSetting={openCardSetting}>
       <div className='mx-auto p-4 text-center text-3xl font-bold uppercase text-black'>Header Area</div>
 
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragMove={handleDragOver} onDragEnd={handleDragEnd}>
         {listsData && (
           <div className={`w-[100%]`}>
             <Suspense fallback={<LoadingComponent />}>
-              <LazyListsComponent lists={listsData} />
+              <LazyListsComponent lists={listsData} setOpenCardSetting={setOpenCardSetting}/>
             </Suspense>
             <DragOverlay dropAnimation={customDropAnimation}>
               {!activeDragItemId || !activeDragItemType}
               {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
-                <ListComponent list={activeDragItemData} />
+                <ListComponent list={activeDragItemData} setOpenCardSetting={setOpenCardSetting}/>
               )}
               {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
-                <CardComponent card={activeDragItemData} />
+                <CardComponent card={activeDragItemData} setOpenCardSetting={setOpenCardSetting}/>
               )}
             </DragOverlay>
           </div>

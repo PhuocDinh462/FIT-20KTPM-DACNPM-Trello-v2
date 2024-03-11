@@ -1,9 +1,11 @@
+import { UniqueIdentifier } from '@dnd-kit/core';
 import { DbSchemas } from '@trello-v2/shared'
 import faker from 'faker';
 const generateRandomDateOrNull = () => (faker.datatype.boolean() ? faker.date.past() : null);
-export type Card = Omit<DbSchemas.CardlistSchema.ICard, 'placeHolder, list_id'> & {
+export type Card = Omit<DbSchemas.CardlistSchema.ICard, 'placeHolder, list_id,_id'> & {
   placeHolder: boolean,
   list_id:string,
+  _id:UniqueIdentifier
 }
 export type List = Omit<DbSchemas.CardlistSchema.CardList, 'cards'> & {
   cards: Card[],

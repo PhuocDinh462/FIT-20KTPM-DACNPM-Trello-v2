@@ -10,7 +10,7 @@ export default function CardComponent({ card, setOpenCardSetting }: CardComponen
   const { colors, darkMode } = useTheme()
 
   const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
-    id: card._id || 'unique' + card._id,
+    id: card._id,
     data: { ...card }
   })
   const styleList = {
