@@ -1,3 +1,4 @@
+import { UniqueIdentifier } from '@dnd-kit/core'
 import { CardComponent, ListSetting } from '.'
 import { ListComponentProps } from '../type'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -22,12 +23,14 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
         setAddCardOpenAt('')
       }
     }
+
     const handleClickOutside_ListSetting = (event: MouseEvent) => {
       if (componentRef_ListSetting.current && !componentRef_ListSetting.current.contains(event.target as Node)) {
         // Clicked outside of Component A, hide it
         setListSettingOpen('')
       }
     }
+
     document.addEventListener('mousedown', handleClickOutside_AddCard)
     document.addEventListener('mousedown', handleClickOutside_ListSetting)
     return () => {
@@ -37,7 +40,7 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
   }, [])
 
   const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
-    id: list.id,
+    id: list._id || 'unique' + list._id,
     data: { ...list }
   })
 
@@ -61,24 +64,27 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
         <HiOutlineDotsHorizontal
           size={'20px'}
           className={`relative rounded-lg  ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-300'}`}
-          onClick={() => setListSettingOpen(list.id)}
+          onClick={() => setListSettingOpen(list._id)}
         />
-        {listSettingOpen && listSettingOpen === list.id && (
+        {listSettingOpen && listSettingOpen === list._id && (
           <div ref={componentRef_ListSetting}>
             <ListSetting closeListSetting={() => setListSettingOpen('')} />
           </div>
         )}
       </div>
       <div className={` relative`}>
-        <SortableContext items={list.data.map((c) => c.id)} strategy={verticalListSortingStrategy}>
-          {list.data &&
-            list.data.map((card, index) => (
+        <SortableContext
+          items={list.cards.map((c) => c._id) as (UniqueIdentifier | { id: UniqueIdentifier })[]}
+          strategy={verticalListSortingStrategy}
+        >
+          {list.cards &&
+            list.cards.map((card, index) => (
               <CardComponent key={index} card={card} setOpenCardSetting={setOpenCardSetting} />
             ))}
         </SortableContext>
         {addCardOpenAt &&
-          addCardOpenAt === list.id &&
-          (list.data[0].placeHolder === false ? (
+          addCardOpenAt === list._id &&
+          (list.cards[0].placeHolder === false ? (
             <div ref={componentRef_AddCard}>
               <div className={` mx-2 mt-2 rounded-xl  `}>
                 <div className={`flex flex-row items-center   justify-between`}>
@@ -96,7 +102,9 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
               <div className={`m-2 flex flex-row space-x-2`}>
                 <button
                   className=' rounded   bg-blue-600 px-3 py-2 hover:bg-blue-700'
-                  onClick={() => setAddCardOpenAt(list.id)}
+                  onClick={() => {
+                    if (list._id) setAddCardOpenAt(list._id)
+                  }}
                 >
                   <p className={`text-left font-semibold text-white`}> Add card</p>
                 </button>
@@ -126,7 +134,9 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
               <div className={`m-2 flex flex-row space-x-2`}>
                 <button
                   className=' rounded   bg-blue-600 px-3 py-2 hover:bg-blue-700'
-                  onClick={() => setAddCardOpenAt(list.id)}
+                  onClick={() => {
+                    if (list._id) setAddCardOpenAt(list._id)
+                  }}
                 >
                   <p className={`text-left font-semibold text-white`}> Add card</p>
                 </button>
@@ -145,7 +155,7 @@ export default function ListComponent({ list, setOpenCardSetting }: ListComponen
           <button
             className={`w-10/12 rounded-lg p-2 ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-300'}`}
             onClick={() => {
-              setAddCardOpenAt(list.id)
+              if (list._id) setAddCardOpenAt(list._id)
             }}
           >
             <p className={`text-left font-semibold `}>+ Add a card</p>

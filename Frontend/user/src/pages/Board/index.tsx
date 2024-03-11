@@ -1,7 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
-import { lists } from './testData/test_data'
+import { listTestDataArray} from './testData/test_data'
 import { List, Card } from './type/index'
-
 import {
   DndContext,
   DragEndEvent,
@@ -16,7 +15,6 @@ import {
   DragMoveEvent
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
-
 import { cloneDeep, isEmpty } from 'lodash'
 import { BoardLayout } from '~/layouts'
 import { generatePlaceHolderCard } from '~/utils/fomatter'
@@ -27,6 +25,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
+let lists  = listTestDataArray
 // const LazyCardComponent = lazy(() => import('./components/Card'))
 // const LazyListComponent = lazy(() => import('./components/List'))
 const LazyListsComponent = lazy(() => import('./components/Lists'))
@@ -65,13 +64,13 @@ export function Board() {
       }
     })
   )
-
   useEffect(() => {
+    setListsData(lists)
     console.log('update list')
 
     const updatedLists_placeHolder = lists.map((list) => ({
       ...list,
-      data: list.data.map((task) => ({
+      data: list.cards.map((task) => ({
         ...task,
         placeHolder: false // Set your default value for placeHolder
       }))
@@ -97,10 +96,10 @@ export function Board() {
   }, [])
 
   function findListByCardId(cardId: any) {
-    return listsData?.find((list) => list?.data?.map((card) => card.id)?.includes(cardId))
+    return listsData?.find((list) => list?.cards?.map((card) => card._id)?.includes(cardId))
   }
   function isCard(obj: any): obj is Card {
-    return 'id' in obj && 'list_id' in obj && 'order' in obj && 'name' in obj && 'list_name' in obj
+    return '_id' in obj && 'list_id' in obj && 'order' in obj && 'name' in obj && 'list_name' in obj
   }
   function handleUpdateAfterDragging() {
     // Gọi API update data ở phía backend
@@ -115,35 +114,35 @@ export function Board() {
     activeDraggingCardData: any
   ) {
     setListsData((prevList) => {
-      const overCardIndex = overList?.data?.findIndex((card) => card.id === overCardId)
+      const overCardIndex = overList?.cards?.findIndex((card) => card._id === overCardId)
       let newCardIndex
       const isBelowOverItem =
         active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
 
       const modifier = isBelowOverItem ? 1 : 0
 
-      newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overList.data.length + 1
+      newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overList.cards.length + 1
 
       const nextList = cloneDeep(prevList)
-      const nextActiveList = nextList?.find((list) => list.id === activeList.id)
-      const nextOverList = nextList?.find((list) => list.id === overList.id)
+      const nextActiveList = nextList?.find((list) => list._id === activeList._id)
+      const nextOverList = nextList?.find((list) => list._id === overList._id)
 
       if (nextActiveList) {
-        nextActiveList.data = nextActiveList.data.filter((card) => card.id !== activeDragingCardId)
-        if (isEmpty(nextActiveList.data)) {
-          nextActiveList.data = [generatePlaceHolderCard(nextActiveList)]
+        nextActiveList.cards = nextActiveList.cards.filter((card) => card._id !== activeDragingCardId)
+        if (isEmpty(nextActiveList.cards)) {
+          nextActiveList.cards = [generatePlaceHolderCard(nextActiveList)]
         }
       }
       if (nextOverList) {
-        nextOverList.data = nextOverList.data.filter((card) => card.id !== activeDragingCardId)
+        nextOverList.cards = nextOverList.cards.filter((card) => card._id !== activeDragingCardId)
         const rebuild_activeDraggingCardData = {
           ...activeDraggingCardData,
-          list_id: nextOverList.id
+          list_id: nextOverList._id
         } as Card
         // Ensure activeDraggingCardData is not undefined before using it
         if (isCard(activeDraggingCardData)) {
-          nextOverList.data.splice(newCardIndex, 0, rebuild_activeDraggingCardData)
-          nextOverList.data = nextOverList.data.filter((card) => card.placeHolder === false)
+          nextOverList.cards.splice(newCardIndex, 0, rebuild_activeDraggingCardData)
+          nextOverList.cards = nextOverList.cards.filter((card) => card.placeHolder === false)
         }
       }
       console.log('nextList = ', nextOverList)
@@ -185,7 +184,7 @@ export function Board() {
       console.log('!activeColumn')
       return
     }
-    if (activeList.id !== overList.id) {
+    if (activeList._id !== overList._id) {
       console.log('Drag Over In')
       handleMoveCardBetweenDifferenceColumn(
         overList,
@@ -216,7 +215,7 @@ export function Board() {
         console.log('!activeColumn')
         return
       }
-      if (oldListWhenDragging.id !== overList.id) {
+      if (oldListWhenDragging._id !== overList._id) {
         handleMoveCardBetweenDifferenceColumn(
           overList,
           overCardId,
@@ -227,15 +226,15 @@ export function Board() {
           activeDraggingCardData
         )
       } else {
-        const oldIndex = oldListWhenDragging.data.findIndex((data) => data.id === activeDragItemId)
-        const newIndex = overList.data.findIndex((data) => data.id === overCardId)
-        const newList = arrayMove(oldListWhenDragging.data, oldIndex, newIndex)
+        const oldIndex = oldListWhenDragging.cards.findIndex((cards) => cards._id === activeDragItemId)
+        const newIndex = overList.cards.findIndex((cards) => cards._id === overCardId)
+        const newList = arrayMove(oldListWhenDragging.cards, oldIndex, newIndex)
         setListsData((prevList) => {
           const nextList = cloneDeep(prevList)
 
-          const targetList = nextList?.find((list) => list.id === overList.id)
+          const targetList = nextList?.find((list) => list._id === overList._id)
           if (targetList) {
-            targetList.data = newList
+            targetList.cards = newList
           }
           return nextList
         })
@@ -246,8 +245,8 @@ export function Board() {
       if (active.id !== over.id && listsData) {
         console.log('keo tha')
 
-        const oldIndex = listsData?.findIndex((data) => data.id === active.id)
-        const newIndex = listsData?.findIndex((data) => data.id === over.id)
+        const oldIndex = listsData?.findIndex((data) => data._id === active.id)
+        const newIndex = listsData?.findIndex((data) => data._id === over.id)
         const newListsData = arrayMove(listsData, oldIndex, newIndex)
         setListsData(newListsData)
         handleUpdateAfterDragging()

@@ -3,6 +3,7 @@ import { ActivitySchema } from "./Activity";
 import { Feature, FeatureSchema } from "./Feature";
 import { Refine_MongoId } from "../utils/RefineMongoId";
 
+
 export const CardSchema = z.object({
   _id: z.string().refine(Refine_MongoId, { message: "Invalid id" }).optional(),
   name: z.string(),
@@ -14,6 +15,8 @@ export const CardSchema = z.object({
   cover: z.string().nullish(),
   description: z.string().nullish(),
 });
+
+
 export const CardlistSchema = z.object({
   _id: z.string().optional().refine(Refine_MongoId, { message: "Invalid id" }),
   board_id: z.string(),
@@ -23,6 +26,8 @@ export const CardlistSchema = z.object({
   watcher_email: z.string().array().default([]),
   archive_at: z.coerce.date().nullish(),
 });
+
+
 export type ICard = z.infer<typeof CardSchema>;
 export type CardList = z.infer<typeof CardlistSchema>;
 

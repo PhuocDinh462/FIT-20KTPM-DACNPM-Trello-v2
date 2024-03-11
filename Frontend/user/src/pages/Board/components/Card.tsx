@@ -10,7 +10,7 @@ export default function CardComponent({ card, setOpenCardSetting }: CardComponen
   const { colors, darkMode } = useTheme()
 
   const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
-    id: card.id,
+    id: card._id || 'unique' + card._id,
     data: { ...card }
   })
   const styleList = {
@@ -78,8 +78,10 @@ export default function CardComponent({ card, setOpenCardSetting }: CardComponen
                 <BsPencil
                   className=''
                   onClick={() => {
-                    setCardSettingOpen(card.id)
-                    setOpenCardSetting(card.id)
+                    if (card._id) {
+                      setCardSettingOpen(card._id)
+                      setOpenCardSetting(card._id)
+                    }
                   }}
                 />
               )}
@@ -106,7 +108,7 @@ export default function CardComponent({ card, setOpenCardSetting }: CardComponen
           </div>
         </div>
       )}
-      {cardSettingOpen && cardSettingOpen === card.id && (
+      {cardSettingOpen && cardSettingOpen === card._id && (
         <div className={`pointer-events-auto `}>
           <div
             style={{
