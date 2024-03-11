@@ -18,26 +18,9 @@
     "noFallthroughCasesInSwitch": false,
     "baseUrl": ".",
     "paths": {
-      "@app/common": [
-        "libs/common/src"
-      ],
-      "@app/common/*": [
-        "libs/common/src/*"
-      ],
-      "@/*": [
-        "apps/trello-v2-backend/src/*"
-      ]
+      "@/*": ["src/*"]
     },
     "allowJs": true,
     "resolveJsonModule": true
-  },
-  "include": [
-    "src/**/*",
-    "test/**/*",
-    "libs/**/*",
-    "apps/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  }
 }
