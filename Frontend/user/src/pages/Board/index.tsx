@@ -22,6 +22,7 @@ import { BoardLayout } from '~/layouts'
 import { generatePlaceHolderCard } from '~/utils/fomatter'
 import LoadingComponent from '~/components/Loading'
 import { CardComponent, ListComponent } from './components'
+import { getAllListAPI } from '~/api/List'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -65,33 +66,37 @@ export function Board() {
       }
     })
   )
+  async function getAllList() {
+    const res = await getAllListAPI()
+    if (res.status === 200) {
+      const updatedLists_placeHolder = res.data.map((list: List) => ({
+        ...list,
+        data: list.cards.map((task) => ({
+          ...task,
+          placeHolder: false // Set your default value for placeHolder
+        }))
+      }))
+      const updatedLists = updatedLists_placeHolder?.map((list: List) => {
+        // Check if data array is empty
+        if (list.cards.length === 0) {
+          // Add a new item to data array
+          const newItem = generatePlaceHolderCard(list)
 
+          return {
+            ...list,
+            data: [newItem]
+          }
+        }
+
+        return list // If data array is not empty, keep it unchanged
+      })
+
+      setListsData(updatedLists_placeHolder)
+    }
+  }
   useEffect(() => {
     console.log('update list')
-
-    const updatedLists_placeHolder = listTestDataArray.map((list: List) => ({
-      ...list,
-      data: list.cards.map((task) => ({
-        ...task,
-        placeHolder: false // Set your default value for placeHolder
-      }))
-    }))
-    const updatedLists = updatedLists_placeHolder.map((list: List) => {
-      // Check if data array is empty
-      if (list.cards.length === 0) {
-        // Add a new item to data array
-        const newItem = generatePlaceHolderCard(list)
-
-        return {
-          ...list,
-          data: [newItem]
-        }
-      }
-
-      return list // If data array is not empty, keep it unchanged
-    })
-    setListsData(updatedLists)
-    console.log(updatedLists)
+    getAllList()
 
     // You can call your API update function here
   }, [])

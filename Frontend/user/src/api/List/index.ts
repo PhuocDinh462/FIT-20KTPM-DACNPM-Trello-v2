@@ -1,8 +1,8 @@
 import { axiosPrivate } from '../api'
 
-export const getAllList = async (data: any) => {
+export const getAllListAPI = async () => {
   try {
-    return await axiosPrivate.get('/v1/class/createClass', {
+    return await axiosPrivate.get('/api/cardlist', {
       headers: {}
     })
   } catch (err) {
@@ -10,9 +10,9 @@ export const getAllList = async (data: any) => {
   }
 }
 
-export const createList = async (data: any) => {
+export const createListAPI = async (data: any) => {
   try {
-    return await axiosPrivate.post('/v1/class/createClass', data, {
+    return await axiosPrivate.post('/api/cardlist', data, {
       headers: {}
     })
   } catch (err) {

@@ -3,7 +3,14 @@ import { ListsComponentProps } from '../type'
 import { ListComponent } from './index'
 
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import { createListAPI } from '~/api/List'
 
+function createList(){
+  const data = {     
+    name: `List ${Math.floor(Math.random() * 100) + 1}`,  
+  };
+  const res = createListAPI
+}
 export default function ListsComponent({ lists, setOpenCardSetting }: ListsComponentProps) {
   return (
     <SortableContext items={lists?.map((l) => l._id) as (UniqueIdentifier | { id: UniqueIdentifier })[]} strategy={horizontalListSortingStrategy}>

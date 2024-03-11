@@ -17,7 +17,7 @@ import axios from "axios";
 //     return config;
 //   });
 export const axiosPrivate = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "http://localhost:3333",
     headers: { "Content-Type": "application/json" },
     withCredentials: true
 });
