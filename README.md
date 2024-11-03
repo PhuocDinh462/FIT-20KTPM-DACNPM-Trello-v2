@@ -1,51 +1,28 @@
 ﻿# FIT-20KTPM-DACNPM-Trello-v2
-# Build the shared package
-## 1. Installation
-Move to the share package directory (from root)
-```
-$ cd packages/shared
-```
-Install the package
-```
-$ npm install
-```
-Build the package
-```
-$ npm run build
-```
+
+# Demo
+https://www.youtube.com/watch?v=MkWbsFDENP0
 
 # Front-end
 ## 1. Installation
-Move to the front-end directory (from root)
-```
-$ cd Frontend
-```
-Install the package
 ```
 $ npm install
 ```
-## 2. Running the react app in dev mode
+## 2. Running the app
 ```
 $ npm run dev
 ```
 
 # Back-end
 ## 1. Installation
-Move to the backend-end directory (from root)
-```
-$ cd Backend
-```
-Install the packages
 ```
 $ npm install
 ```
-## 2. Build docker 
-Compose docker image for the database
+## 2. Build docker
 ```
-$ docker compose up
+$ docker build -t server .
 ```
 ## 3. Running server
-Run the server app in dev mode (Nestjs)
 ```
-$ npm run start:dev
+$ docker compose up
 ```
